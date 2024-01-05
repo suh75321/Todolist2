@@ -1,9 +1,7 @@
 package com.teamsparta.courseregistration2.domain.service
 
-import com.teamsparta.courseregistration2.domain.Comment
 import com.teamsparta.courseregistration2.domain.Task
-import com.teamsparta.courseregistration2.domain.TaskRepository
-import com.teamsparta.courseregistration2.domain.dto.CommentDto
+import com.teamsparta.courseregistration2.domain.repository.TaskRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.util.*
@@ -26,11 +24,14 @@ class TaskService(private val taskRepository: TaskRepository) {
 
     fun updateTask(id: Long, newTask: Task): Optional<Task> {
         return taskRepository.findById(id).map { existingTask ->
-            existingTask.title = newTask.title
-            existingTask.content = newTask.content
-            existingTask.writer = newTask.writer
+            updateTaskDetails(existingTask, newTask)
             taskRepository.save(existingTask)
         }
+    }
+    private fun updateTaskDetails(existingTask: Task, newTask: Task) {
+        existingTask.title = newTask.title
+        existingTask.content = newTask.content
+        existingTask.writer = newTask.writer
     }
 
     fun deleteTask(id: Long) {
@@ -39,17 +40,6 @@ class TaskService(private val taskRepository: TaskRepository) {
 
     fun deleteAllTasks() {
         TODO("Not yet implemented")
-    }
-
-    fun addCommentToTask(task: Task, commentDto: CommentDto): Task {
-        val comment = Comment(
-            author = commentDto.author,
-            password = commentDto.password,
-            content = commentDto.content
-        )
-        val updatedComments = task.comments.toMutableList()
-        updatedComments.add(comment)
-        return task.copy(comments = updatedComments)
     }
 
 }

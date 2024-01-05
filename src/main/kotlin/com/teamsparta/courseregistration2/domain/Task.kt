@@ -1,5 +1,6 @@
 package com.teamsparta.courseregistration2.domain
 
+import com.fasterxml.jackson.annotation.JsonView
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -11,21 +12,23 @@ data class Task(
     var content: String = "",
     var writer: String = "",
     var createdAt: LocalDateTime = LocalDateTime.now(),
-    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    var comments: List<Comment> = mutableListOf() // Add comments field to Task
+
+    // 완료 여부 필드 추가
+    var isCompleted: Boolean = false,
+
+    @JsonView(Views.Detail::class)
+    @OneToMany(mappedBy = "task", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var comments: List<Comment> = ArrayList()
 ) {
-    // No-arg constructor for JPA
     constructor() : this(id = null)
+
+    // 완료 상태 변경 메소드 추가
+    fun completeTask() {
+        this.isCompleted = true
+    }
 }
 
-@Entity
-data class Comment(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-    var author: String = "",
-    var password: String = "", // Add password field to Comment
-    var content: String = ""
-) {
-    // No-arg constructor for JPA
-    constructor() : this(id = null)
+interface Views {
+    interface Summary
+    interface Detail : Summary
 }

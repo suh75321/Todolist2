@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="postgres@db.evipgmmbxbfujsznuxhj.supabase.co" uuid="d7c5ca23-9619-457a-a700-93296a38f2f2">
+    <data-source source="LOCAL" name="할일" uuid="d7c5ca23-9619-457a-a700-93296a38f2f2">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
